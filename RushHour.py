@@ -5,6 +5,10 @@ Created on Thu Jun 20 12:17:16 2019
 @author: mmelkowski
 """
 import random
+import matplotlib.pyplot as plt
+import numpy as np
+import pprint
+
 # Question: Faut il courrir dans les transports?
 
 """
@@ -32,7 +36,8 @@ que s'il n'est pas perdu à attendre.
 
 Se presser pour obtenir le metro est aussi un gain
 
-Ainsi il faut soit se presser pour obtenir le metro d'avant ou pour ne pas rater celui qui arrive
+Ainsi il faut soit se presser pour obtenir le metro d'avant
+ou pour ne pas rater celui qui arrive
 
 
 """
@@ -42,7 +47,8 @@ class RailTime():
     def __init__(self, l_temps_metro, l_gain):
         # temps d'attente du metro
         self.l_temps_metro = l_temps_metro
-        self.l_temps_attentes = [random.uniform(0, elt) for elt in l_temps_metro]
+        self.l_temps_attentes = [random.uniform(0, elt) for
+                                 elt in l_temps_metro]
         self.l_gain = l_gain
         self.metro_evite = 0
 
@@ -80,23 +86,54 @@ class RailTime():
         print("Pressé", round(self.temps_presse, 2))
 
 
-if __name__ == "__main__":
+def process_rail(temps_att, gain, nb_corres, nb_repet=10000):
     val = []
     val_p = []
     metro = []
-    for _ in range(10000):
-        rail = RailTime([10, 10], [2, 2])
+    for _ in range(nb_repet):
+        rail = RailTime([2, 2], [0.5, 0.5])
         rail.calc_normal()
         val.append(rail.temps_normal)
 
         rail.calc_presse()
         val_p.append(rail.temps_presse)
         metro.append(rail.metro_evite)
-    print(sum(val)/10000)
-    print(sum(val_p)/10000)
-    print(sum(metro)/10000)
+
+
+def math_calcul():
+    mat = []
+    for i in [0.2, 0.5, 0.8, 1]:
+        line = []
+        for j in range(1, 10):
+            line.append(round((i/j)*100, 2))
+        mat.append(np.array(line))
+    mat = np.array(mat)
+    print("     1      2      3    4     5     6     7     8     9")
+
+    return mat
+
+
+if __name__ == "__main__":
+    """
+    val = []
+    val_p = []
+    metro = []
+    for _ in range(10000):
+        rail = RailTime([2, 2], [0.5, 0.5])
+        rail.calc_normal()
+        val.append(rail.temps_normal)
+
+        rail.calc_presse()
+        val_p.append(rail.temps_presse)
+        metro.append(rail.metro_evite)
+
+    print("temps:     ", sum(val)/10000)
+    print("temps acc: ", sum(val_p)/10000)
+    print("nb metro: ", sum(metro)/10000)
     c = [metro.count(0), metro.count(1), metro.count(2)]
     c2 = [round((elt/10000)*100, 1) for elt in c]
+
+    print("   0    1    2")
     print(c2)
-    
-    
+    """
+    print(math_calcul())
